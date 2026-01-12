@@ -12,9 +12,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
-            <Link to="/" className="flex items-center gap-2 mb-4">
+            <Link to="/" className="flex items-center mb-4">
               <span className="text-2xl font-bold text-white">lwr</span>
-              <span className="text-red-500 text-2xl font-bold">.ro</span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
               {profileData.bio}
