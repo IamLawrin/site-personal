@@ -1,15 +1,34 @@
 import React, { useState } from 'react';
-import { Edit2, Trash2, Plus, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Edit2, Trash2, Plus } from 'lucide-react';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { useAuth } from '../../context/AuthContext';
 
 const ProjectCard = ({ project, onEdit, onDelete }) => {
   const { isAdmin } = useAuth();
+  const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  const handleClick = () => {
+    navigate(`/projects/${project.id}`);
+  };
+
+  const handleEdit = (e) => {
+    e.stopPropagation();
+    onEdit && onEdit(project);
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    onDelete && onDelete(project.id);
+  };
+
   return (
-    <div className="group relative bg-zinc-900 rounded-2xl overflow-hidden border border-white/10 hover:border-red-500/50 transition-all duration-300">
+    <div 
+      onClick={handleClick}
+      className="group relative bg-zinc-900 rounded-2xl overflow-hidden border border-white/10 hover:border-red-500/50 transition-all duration-300 cursor-pointer"
+    >
       {/* Image */}
       <div className="relative aspect-video overflow-hidden">
         <div className={`absolute inset-0 bg-zinc-800 ${imageLoaded ? 'hidden' : 'animate-pulse'}`} />
@@ -34,7 +53,7 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
               size="sm"
               variant="secondary"
               className="bg-white/90 hover:bg-white text-black h-8 w-8 p-0"
-              onClick={() => onEdit && onEdit(project)}
+              onClick={handleEdit}
             >
               <Edit2 className="w-4 h-4" />
             </Button>
@@ -42,7 +61,7 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
               size="sm"
               variant="destructive"
               className="h-8 w-8 p-0"
-              onClick={() => onDelete && onDelete(project.id)}
+              onClick={handleDelete}
             >
               <Trash2 className="w-4 h-4" />
             </Button>
