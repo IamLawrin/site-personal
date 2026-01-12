@@ -1,19 +1,35 @@
-import React, { useState } from 'react';
-import { Plus, Filter } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, Filter, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { mockProjects } from '../data/mockData';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import { projectsAPI } from '../services/api';
 import ProjectCard, { AddProjectCard } from '../components/projects/ProjectCard';
 import ProjectModal from '../components/projects/ProjectModal';
 
 const ProjectsPage = () => {
   const { isAdmin } = useAuth();
   const { t } = useLanguage();
-  const [projects, setProjects] = useState(mockProjects);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+
+  // Fetch projects from API
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const data = await projectsAPI.getAll();
+        setProjects(data);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
 
   const categories = ['all', ...new Set(projects.map(p => p.category))];
 
@@ -31,27 +47,39 @@ const ProjectsPage = () => {
     setModalOpen(true);
   };
 
-  const handleDeleteProject = (id) => {
+  const handleDeleteProject = async (id) => {
     if (window.confirm('Ești sigur că vrei să ștergi acest proiect?')) {
-      setProjects(projects.filter(p => p.id !== id));
+      try {
+        await projectsAPI.delete(id);
+        setProjects(projects.filter(p => p.id !== id));
+      } catch (error) {
+        console.error('Error deleting project:', error);
+      }
     }
   };
 
-  const handleSaveProject = (projectData) => {
-    if (editingProject) {
-      setProjects(projects.map(p => 
-        p.id === editingProject.id ? { ...p, ...projectData } : p
-      ));
-    } else {
-      const newProject = {
-        ...projectData,
-        id: Date.now().toString(),
-        date: new Date().toISOString().split('T')[0]
-      };
-      setProjects([newProject, ...projects]);
+  const handleSaveProject = async (projectData) => {
+    try {
+      if (editingProject) {
+        const updated = await projectsAPI.update(editingProject.id, projectData);
+        setProjects(projects.map(p => p.id === editingProject.id ? updated : p));
+      } else {
+        const newProject = await projectsAPI.create(projectData);
+        setProjects([newProject, ...projects]);
+      }
+      setModalOpen(false);
+    } catch (error) {
+      console.error('Error saving project:', error);
     }
-    setModalOpen(false);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black pt-24 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black pt-24 pb-16">
@@ -108,7 +136,7 @@ const ProjectsPage = () => {
           ))}
         </div>
 
-        {filteredProjects.length === 0 && (
+        {filteredProjects.length === 0 && !isAdmin && (
           <div className="text-center py-20">
             <p className="text-gray-500">{t('projects.noProjects')}</p>
           </div>
