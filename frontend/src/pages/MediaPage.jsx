@@ -150,7 +150,7 @@ const MediaPage = () => {
               className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span>Înapoi la albume</span>
+              <span>{t('media.backToAlbums')}</span>
             </button>
 
             <div className="flex items-center justify-between mb-8">
@@ -159,7 +159,7 @@ const MediaPage = () => {
                   {activeAlbum.name}
                 </h1>
                 <p className="text-gray-400">{activeAlbum.description}</p>
-                <p className="text-gray-500 text-sm mt-1">{albumImages.length} imagini</p>
+                <p className="text-gray-500 text-sm mt-1">{albumImages.length} {t('media.images')}</p>
               </div>
 
               {isAdmin && (
@@ -169,14 +169,14 @@ const MediaPage = () => {
                     className="bg-red-500 hover:bg-red-600 text-white rounded-full"
                   >
                     <Upload className="w-4 h-4 mr-2" />
-                    Upload
+                    {t('media.upload')}
                   </Button>
                   <Button
                     onClick={() => { setEditingAlbum(activeAlbum); setAlbumModalOpen(true); }}
                     variant="outline"
                     className="border-white/20 text-white hover:bg-white/10 rounded-full"
                   >
-                    Editează Album
+                    {t('media.editAlbum')}
                   </Button>
                 </div>
               )}
