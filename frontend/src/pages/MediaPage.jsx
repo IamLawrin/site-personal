@@ -385,7 +385,7 @@ const MediaPage = () => {
                 className="bg-red-500 hover:bg-red-600 text-white rounded-full"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                Album nou
+                {t('media.newAlbum')}
               </Button>
             )}
           </div>
@@ -411,7 +411,7 @@ const MediaPage = () => {
                     {album.name}
                   </h3>
                   <p className="text-gray-400 text-sm mb-2">{album.description}</p>
-                  <p className="text-gray-500 text-xs">{getAlbumCount(album.id)} imagini</p>
+                  <p className="text-gray-500 text-xs">{getAlbumCount(album.id)} {t('media.images')}</p>
                 </div>
 
                 {/* Admin edit button */}
