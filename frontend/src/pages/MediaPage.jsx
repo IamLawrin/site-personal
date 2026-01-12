@@ -68,21 +68,29 @@ const MediaPage = () => {
   // Get active album details
   const activeAlbum = albums.find(a => a.id === activeAlbumId);
 
-  // Featured images for slideshow (from all albums)
-  const featuredImages = images.slice(0, 5);
+  // Featured slides for slideshow - last 5 album covers (sorted by date, newest first)
+  const featuredSlides = [...albums]
+    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+    .slice(0, 5)
+    .map(album => ({
+      id: album.id,
+      url: album.cover,
+      title: album.name,
+      category: album.description
+    }));
 
   // Update album counts
   const getAlbumCount = (albumId) => images.filter(img => img.albumId === albumId).length;
 
   // Auto-advance slideshow
   useEffect(() => {
-    if (!activeAlbumId && featuredImages.length > 1) {
+    if (!activeAlbumId && featuredSlides.length > 1) {
       const timer = setInterval(() => {
-        setCurrentSlide(prev => (prev + 1) % featuredImages.length);
+        setCurrentSlide(prev => (prev + 1) % featuredSlides.length);
       }, 5000);
       return () => clearInterval(timer);
     }
-  }, [featuredImages.length, activeAlbumId]);
+  }, [featuredSlides.length, activeAlbumId]);
 
   const handleAddImage = (imageData) => {
     const newImage = {
