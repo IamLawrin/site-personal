@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Lock, LogOut, Settings } from 'lucide-react';
+import { Menu, X, Lock, LogOut, Settings, Globe } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import AdminLoginModal from '../admin/AdminLoginModal';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const { isAdmin, logout } = useAuth();
+  const { language, toggleLanguage, t } = useLanguage();
   const location = useLocation();
 
   const navLinks = [
-    { path: '/', label: 'Acasă' },
-    { path: '/projects', label: 'Proiecte' },
-    { path: '/media', label: 'Media' },
-    { path: '/reviews', label: 'Recenzii' },
-    { path: '/contact', label: 'Contact' },
+    { path: '/', label: t('nav.home') },
+    { path: '/projects', label: t('nav.projects') },
+    { path: '/media', label: t('nav.media') },
+    { path: '/reviews', label: t('nav.reviews') },
+    { path: '/contact', label: t('nav.contact') },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -48,13 +50,22 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* Admin Button */}
+            {/* Language Toggle & Admin */}
             <div className="hidden md:flex items-center gap-2">
+              {/* Language Toggle */}
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all text-sm font-medium"
+              >
+                <Globe className="w-4 h-4" />
+                {language.toUpperCase()}
+              </button>
+
               {isAdmin ? (
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-red-400 flex items-center gap-1">
                     <Settings className="w-3 h-3" />
-                    Admin Mode
+                    {t('nav.adminMode')}
                   </span>
                   <Button
                     variant="ghost"
@@ -78,12 +89,22 @@ const Header = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 text-gray-300 hover:text-white"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            <div className="flex md:hidden items-center gap-2">
+              {/* Mobile Language Toggle */}
+              <button
+                onClick={toggleLanguage}
+                className="p-2 rounded-full bg-white/5 text-gray-300 hover:text-white transition-all text-sm font-medium"
+              >
+                {language.toUpperCase()}
+              </button>
+              
+              <button
+                className="p-2 text-gray-300 hover:text-white"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -112,7 +133,7 @@ const Header = () => {
                     className="flex items-center gap-2 px-4 py-3 text-gray-400 hover:text-white w-full"
                   >
                     <LogOut className="w-4 h-4" />
-                    Deconectare Admin
+                    {t('nav.logout')}
                   </button>
                 ) : (
                   <button
@@ -120,7 +141,7 @@ const Header = () => {
                     className="flex items-center gap-2 px-4 py-3 text-gray-400 hover:text-white w-full"
                   >
                     <Lock className="w-4 h-4" />
-                    Admin Login
+                    {t('nav.adminLogin')}
                   </button>
                 )}
               </div>
