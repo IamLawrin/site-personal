@@ -112,7 +112,7 @@ const HomePage = () => {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-6">
                 <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
-                  <span className="text-3xl font-bold text-red-500">{mockProjects.length}+</span>
+                  <span className="text-3xl font-bold text-red-500">{projects.length}+</span>
                   <p className="text-gray-400 text-sm mt-1">{t('home.projects')}</p>
                 </div>
                 <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
@@ -120,7 +120,7 @@ const HomePage = () => {
                   <p className="text-gray-400 text-sm mt-1">{t('home.age')}</p>
                 </div>
                 <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
-                  <span className="text-3xl font-bold text-red-500">{mockReviews.length}+</span>
+                  <span className="text-3xl font-bold text-red-500">{reviews.length}+</span>
                   <p className="text-gray-400 text-sm mt-1">{t('home.reviews')}</p>
                 </div>
               </div>
