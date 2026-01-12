@@ -6,6 +6,7 @@ import { Button } from '../components/ui/button';
 import { Label } from '../components/ui/label';
 import { profileData } from '../data/mockData';
 import { useLanguage } from '../context/LanguageContext';
+import { contactAPI } from '../services/api';
 
 const ContactPage = () => {
   const { t } = useLanguage();
@@ -17,18 +18,24 @@ const ContactPage = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError('');
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    setSubmitted(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setIsSubmitting(false);
-
-    setTimeout(() => setSubmitted(false), 5000);
+    try {
+      await contactAPI.send(formData);
+      setSubmitted(true);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (err) {
+      setError('A apărut o eroare. Te rog încearcă din nou.');
+      console.error('Error sending message:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -155,6 +162,10 @@ const ContactPage = () => {
                       required
                     />
                   </div>
+
+                  {error && (
+                    <p className="text-red-400 text-sm">{error}</p>
+                  )}
 
                   <Button
                     type="submit"
