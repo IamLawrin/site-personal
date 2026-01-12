@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Plus, X, Trash2, Upload, ChevronLeft, ChevronRight, Image as ImageIcon, FolderOpen } from 'lucide-react';
+import { ArrowLeft, Plus, X, Trash2, Upload, ChevronLeft, ChevronRight, Image as ImageIcon, FolderOpen, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import { albumsAPI, mediaAPI } from '../services/api';
 import MediaUploadModal from '../components/media/MediaUploadModal';
 import AlbumModal from '../components/media/AlbumModal';
-import { mockGalleryImages } from '../data/mockData';
 
 // Helper to check if item is new (added within last 7 days)
 const isNewItem = (dateString) => {
@@ -23,42 +23,34 @@ const MediaPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeAlbumId = searchParams.get('album');
   
+  const [loading, setLoading] = useState(true);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [albumModalOpen, setAlbumModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [editingAlbum, setEditingAlbum] = useState(null);
   
-  // Albums with cover images
-  const [albums, setAlbums] = useState([
-    { 
-      id: 'electronics', 
-      name: 'Electronică', 
-      description: 'Proiecte și componente electronice',
-      cover: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop',
-      createdAt: '2024-12-01'
-    },
-    { 
-      id: 'workspace', 
-      name: 'Workspace', 
-      description: 'Laboratorul meu de lucru',
-      cover: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop',
-      createdAt: '2024-11-15'
-    },
-    { 
-      id: 'projects', 
-      name: 'Proiecte', 
-      description: 'Proiecte finalizate',
-      cover: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop',
-      createdAt: new Date().toISOString().split('T')[0] // Today - will show NEW badge
-    },
-  ]);
+  const [albums, setAlbums] = useState([]);
+  const [images, setImages] = useState([]);
 
-  const [images, setImages] = useState(mockGalleryImages.map(img => ({
-    ...img,
-    albumId: img.category.toLowerCase() === 'electronics' ? 'electronics' : 
-             img.category.toLowerCase() === 'workspace' ? 'workspace' : 'projects'
-  })));
+  // Fetch albums and images from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [albumsData, imagesData] = await Promise.all([
+          albumsAPI.getAll(),
+          mediaAPI.getAll()
+        ]);
+        setAlbums(albumsData);
+        setImages(imagesData);
+      } catch (error) {
+        console.error('Error fetching media data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   // Get images for active album
   const albumImages = activeAlbumId 
@@ -92,44 +84,55 @@ const MediaPage = () => {
     }
   }, [featuredSlides.length, activeAlbumId]);
 
-  const handleAddImage = (imageData) => {
-    const newImage = {
-      ...imageData,
-      id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0]
-    };
-    setImages(prev => [newImage, ...prev]);
-    setUploadModalOpen(false);
+  const handleAddImage = async (imageData) => {
+    try {
+      const newImage = await mediaAPI.create(imageData);
+      setImages(prev => [newImage, ...prev]);
+      setUploadModalOpen(false);
+    } catch (error) {
+      console.error('Error adding image:', error);
+    }
   };
 
-  const handleDeleteImage = (id, e) => {
+  const handleDeleteImage = async (id, e) => {
     e.stopPropagation();
     if (window.confirm('Ștergi această imagine?')) {
-      setImages(prev => prev.filter(img => img.id !== id));
+      try {
+        await mediaAPI.delete(id);
+        setImages(prev => prev.filter(img => img.id !== id));
+      } catch (error) {
+        console.error('Error deleting image:', error);
+      }
     }
   };
 
-  const handleSaveAlbum = (albumData) => {
-    if (editingAlbum) {
-      setAlbums(prev => prev.map(a => a.id === editingAlbum.id ? { ...a, ...albumData } : a));
-    } else {
-      const newAlbum = {
-        ...albumData,
-        id: albumData.name.toLowerCase().replace(/\s+/g, '-'),
-        cover: albumData.cover || 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop',
-        createdAt: new Date().toISOString().split('T')[0]
-      };
-      setAlbums(prev => [...prev, newAlbum]);
+  const handleSaveAlbum = async (albumData) => {
+    try {
+      if (editingAlbum) {
+        const updated = await albumsAPI.update(editingAlbum.id, albumData);
+        setAlbums(prev => prev.map(a => a.id === editingAlbum.id ? updated : a));
+      } else {
+        const newAlbum = await albumsAPI.create(albumData);
+        setAlbums(prev => [newAlbum, ...prev]);
+      }
+      setAlbumModalOpen(false);
+      setEditingAlbum(null);
+    } catch (error) {
+      console.error('Error saving album:', error);
     }
-    setAlbumModalOpen(false);
-    setEditingAlbum(null);
   };
 
-  const handleDeleteAlbum = (albumId) => {
+  const handleDeleteAlbum = async (albumId) => {
     if (window.confirm('Ștergi acest album? Imaginile vor fi șterse.')) {
-      setImages(prev => prev.filter(img => img.albumId !== albumId));
-      setAlbums(prev => prev.filter(a => a.id !== albumId));
-      setSearchParams({});
+      try {
+        await albumsAPI.delete(albumId);
+        setAlbums(prev => prev.filter(a => a.id !== albumId));
+        setImages(prev => prev.filter(img => img.albumId !== albumId));
+        setSearchParams({});
+        setAlbumModalOpen(false);
+      } catch (error) {
+        console.error('Error deleting album:', error);
+      }
     }
   };
 
@@ -158,6 +161,14 @@ const MediaPage = () => {
     const prevIndex = (currentIndex - 1 + albumImages.length) % albumImages.length;
     setSelectedImage(albumImages[prevIndex]);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black pt-24 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
+      </div>
+    );
+  }
 
   // ALBUM VIEW - When an album is selected
   if (activeAlbumId && activeAlbum) {
@@ -469,6 +480,13 @@ const MediaPage = () => {
               </div>
             )}
           </div>
+
+          {albums.length === 0 && !isAdmin && (
+            <div className="text-center py-20">
+              <FolderOpen className="w-16 h-16 text-gray-700 mx-auto mb-4" />
+              <p className="text-gray-500">Nu există albume încă.</p>
+            </div>
+          )}
         </div>
       </section>
 
