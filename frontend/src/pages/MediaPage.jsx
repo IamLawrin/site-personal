@@ -3,12 +3,14 @@ import { useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Plus, X, Trash2, Upload, ChevronLeft, ChevronRight, Image as ImageIcon, FolderOpen } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import MediaUploadModal from '../components/media/MediaUploadModal';
 import AlbumModal from '../components/media/AlbumModal';
 import { mockGalleryImages } from '../data/mockData';
 
 const MediaPage = () => {
   const { isAdmin } = useAuth();
+  const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeAlbumId = searchParams.get('album');
   
