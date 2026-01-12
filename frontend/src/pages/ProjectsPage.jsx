@@ -3,20 +3,20 @@ import { Plus, Filter } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { mockProjects } from '../data/mockData';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import ProjectCard, { AddProjectCard } from '../components/projects/ProjectCard';
 import ProjectModal from '../components/projects/ProjectModal';
 
 const ProjectsPage = () => {
   const { isAdmin } = useAuth();
+  const { t } = useLanguage();
   const [projects, setProjects] = useState(mockProjects);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
 
-  // Get unique categories
   const categories = ['all', ...new Set(projects.map(p => p.category))];
 
-  // Filter projects
   const filteredProjects = selectedCategory === 'all' 
     ? projects 
     : projects.filter(p => p.category === selectedCategory);
@@ -39,12 +39,10 @@ const ProjectsPage = () => {
 
   const handleSaveProject = (projectData) => {
     if (editingProject) {
-      // Update existing
       setProjects(projects.map(p => 
         p.id === editingProject.id ? { ...p, ...projectData } : p
       ));
     } else {
-      // Add new
       const newProject = {
         ...projectData,
         id: Date.now().toString(),
@@ -60,12 +58,12 @@ const ProjectsPage = () => {
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="mb-12">
-          <span className="text-red-500 text-sm font-mono uppercase tracking-wider">Portofoliu</span>
+          <span className="text-red-500 text-sm font-mono uppercase tracking-wider">{t('projects.portfolio')}</span>
           <h1 className="text-4xl md:text-5xl font-bold text-white mt-2 mb-4">
-            Proiectele Mele
+            {t('projects.myProjects')}
           </h1>
           <p className="text-gray-400 max-w-2xl">
-            O colecție de proiecte din domeniul electronicii, programație și alte pasiuni personale.
+            {t('projects.description')}
           </p>
         </div>
 
@@ -82,18 +80,17 @@ const ProjectsPage = () => {
                   : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
               }`}
             >
-              {category === 'all' ? 'Toate' : category}
+              {category === 'all' ? t('projects.all') : category}
             </button>
           ))}
 
-          {/* Admin Add Button */}
           {isAdmin && (
             <Button
               onClick={handleAddProject}
               className="ml-auto bg-red-500 hover:bg-red-600 text-white rounded-full"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Adaugă Proiect
+              {t('projects.addProject')}
             </Button>
           )}
         </div>
@@ -113,12 +110,11 @@ const ProjectsPage = () => {
 
         {filteredProjects.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-gray-500">Nu există proiecte în această categorie.</p>
+            <p className="text-gray-500">{t('projects.noProjects')}</p>
           </div>
         )}
       </div>
 
-      {/* Project Modal */}
       <ProjectModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

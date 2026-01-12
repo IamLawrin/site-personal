@@ -3,11 +3,13 @@ import { Plus, Star } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { mockReviews } from '../data/mockData';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import ReviewCard from '../components/reviews/ReviewCard';
 import ReviewModal from '../components/reviews/ReviewModal';
 
 const ReviewsPage = () => {
   const { isAdmin } = useAuth();
+  const { t } = useLanguage();
   const [reviews, setReviews] = useState(mockReviews);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
@@ -44,7 +46,6 @@ const ReviewsPage = () => {
     setModalOpen(false);
   };
 
-  // Calculate average rating
   const avgRating = reviews.length > 0 
     ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
     : 0;
@@ -54,12 +55,12 @@ const ReviewsPage = () => {
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="mb-12">
-          <span className="text-red-500 text-sm font-mono uppercase tracking-wider">Testimoniale</span>
+          <span className="text-red-500 text-sm font-mono uppercase tracking-wider">{t('reviews.testimonials')}</span>
           <h1 className="text-4xl md:text-5xl font-bold text-white mt-2 mb-4">
-            Recenzii
+            {t('reviews.title')}
           </h1>
           <p className="text-gray-400 max-w-2xl mb-6">
-            Părerile colegilor, prietenilor și clienților despre colaborările noastre.
+            {t('reviews.description')}
           </p>
 
           {/* Stats */}
@@ -69,7 +70,7 @@ const ReviewsPage = () => {
               <Star className="w-6 h-6 text-red-500 fill-red-500" />
             </div>
             <div className="text-gray-500">
-              din {reviews.length} recenzii
+              {t('reviews.from')} {reviews.length} {t('reviews.reviewsCount')}
             </div>
 
             {isAdmin && (
@@ -78,7 +79,7 @@ const ReviewsPage = () => {
                 className="ml-auto bg-red-500 hover:bg-red-600 text-white rounded-full"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                Adaugă Recenzie
+                {t('reviews.addReview')}
               </Button>
             )}
           </div>
@@ -98,12 +99,11 @@ const ReviewsPage = () => {
 
         {reviews.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-gray-500">Nu există recenzii încă.</p>
+            <p className="text-gray-500">{t('reviews.noReviews')}</p>
           </div>
         )}
       </div>
 
-      {/* Review Modal */}
       <ReviewModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

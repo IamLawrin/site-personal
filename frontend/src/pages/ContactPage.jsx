@@ -5,8 +5,10 @@ import { Textarea } from '../components/ui/textarea';
 import { Button } from '../components/ui/button';
 import { Label } from '../components/ui/label';
 import { profileData } from '../data/mockData';
+import { useLanguage } from '../context/LanguageContext';
 
 const ContactPage = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,15 +22,12 @@ const ContactPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call (will be replaced with actual backend)
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // For now, just show success
     setSubmitted(true);
     setFormData({ name: '', email: '', subject: '', message: '' });
     setIsSubmitting(false);
 
-    // Reset after 5 seconds
     setTimeout(() => setSubmitted(false), 5000);
   };
 
@@ -37,12 +36,12 @@ const ContactPage = () => {
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-red-500 text-sm font-mono uppercase tracking-wider">Contact</span>
+          <span className="text-red-500 text-sm font-mono uppercase tracking-wider">{t('contact.title')}</span>
           <h1 className="text-4xl md:text-5xl font-bold text-white mt-2 mb-4">
-            Hai să vorbim
+            {t('contact.heading')}
           </h1>
           <p className="text-gray-400 max-w-xl mx-auto">
-            Ai o întrebare sau vrei să colaborăm la un proiect? Trimite-mi un mesaj!
+            {t('contact.description')}
           </p>
         </div>
 
@@ -50,7 +49,7 @@ const ContactPage = () => {
           {/* Contact Info */}
           <div className="md:col-span-2">
             <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-xl font-semibold text-white mb-6">Informații de contact</h2>
+              <h2 className="text-xl font-semibold text-white mb-6">{t('contact.contactInfo')}</h2>
               
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
@@ -58,7 +57,7 @@ const ContactPage = () => {
                     <Mail className="w-5 h-5 text-red-500" />
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm">Email</p>
+                    <p className="text-gray-400 text-sm">{t('contact.email')}</p>
                     <a href={`mailto:${profileData.email}`} className="text-white hover:text-red-400 transition-colors">
                       {profileData.email}
                     </a>
@@ -70,7 +69,7 @@ const ContactPage = () => {
                     <User className="w-5 h-5 text-red-500" />
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm">Student la</p>
+                    <p className="text-gray-400 text-sm">{t('contact.studentAt')}</p>
                     <p className="text-white">{profileData.university}</p>
                   </div>
                 </div>
@@ -78,8 +77,7 @@ const ContactPage = () => {
 
               <div className="mt-8 pt-6 border-t border-white/10">
                 <p className="text-gray-400 text-sm leading-relaxed">
-                  Răspund de obicei în 24-48 de ore. Pentru proiecte urgente, 
-                  te rog să menționezi acest lucru în mesaj.
+                  {t('contact.responseTime')}
                 </p>
               </div>
             </div>
@@ -92,9 +90,9 @@ const ContactPage = () => {
                 <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-500" />
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-2">Mesaj trimis!</h3>
+                <h3 className="text-xl font-semibold text-white mb-2">{t('contact.messageSent')}</h3>
                 <p className="text-gray-400">
-                  Îți mulțumesc pentru mesaj. Voi răspunde cât de curând posibil.
+                  {t('contact.thankYou')}
                 </p>
               </div>
             ) : (
@@ -104,20 +102,20 @@ const ContactPage = () => {
                     <div>
                       <Label className="text-gray-300 mb-2 block">
                         <User className="w-4 h-4 inline mr-2" />
-                        Nume
+                        {t('contact.name')}
                       </Label>
                       <Input
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="bg-black/50 border-white/20 text-white focus:border-red-500"
-                        placeholder="Numele tău"
+                        placeholder={t('contact.yourName')}
                         required
                       />
                     </div>
                     <div>
                       <Label className="text-gray-300 mb-2 block">
                         <Mail className="w-4 h-4 inline mr-2" />
-                        Email
+                        {t('contact.email')}
                       </Label>
                       <Input
                         type="email"
@@ -133,13 +131,13 @@ const ContactPage = () => {
                   <div>
                     <Label className="text-gray-300 mb-2 block">
                       <FileText className="w-4 h-4 inline mr-2" />
-                      Subiect
+                      {t('contact.subject')}
                     </Label>
                     <Input
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       className="bg-black/50 border-white/20 text-white focus:border-red-500"
-                      placeholder="Despre ce e vorba?"
+                      placeholder={t('contact.aboutWhat')}
                       required
                     />
                   </div>
@@ -147,13 +145,13 @@ const ContactPage = () => {
                   <div>
                     <Label className="text-gray-300 mb-2 block">
                       <MessageSquare className="w-4 h-4 inline mr-2" />
-                      Mesaj
+                      {t('contact.message')}
                     </Label>
                     <Textarea
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       className="bg-black/50 border-white/20 text-white focus:border-red-500 min-h-32"
-                      placeholder="Scrie mesajul tău aici..."
+                      placeholder={t('contact.writeMessage')}
                       required
                     />
                   </div>
@@ -164,10 +162,10 @@ const ContactPage = () => {
                     className="w-full bg-red-500 hover:bg-red-600 text-white py-6 text-lg rounded-xl transition-all"
                   >
                     {isSubmitting ? (
-                      'Se trimite...'
+                      t('contact.sending')
                     ) : (
                       <>
-                        Trimite Mesaj
+                        {t('contact.sendMessage')}
                         <Send className="ml-2 w-5 h-5" />
                       </>
                     )}

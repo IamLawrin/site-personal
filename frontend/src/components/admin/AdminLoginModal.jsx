@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 const AdminLoginModal = ({ isOpen, onClose }) => {
   const [password, setPassword] = useState('');
@@ -11,13 +12,13 @@ const AdminLoginModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
-    // Simulate slight delay for better UX
     await new Promise(resolve => setTimeout(resolve, 300));
 
     const success = login(password);
@@ -26,7 +27,7 @@ const AdminLoginModal = ({ isOpen, onClose }) => {
       setPassword('');
       onClose();
     } else {
-      setError('Parolă incorectă');
+      setError(t('admin.wrongPassword'));
     }
     
     setIsLoading(false);
@@ -44,7 +45,7 @@ const AdminLoginModal = ({ isOpen, onClose }) => {
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <Lock className="w-5 h-5 text-red-500" />
-            Admin Login
+            {t('admin.login')}
           </DialogTitle>
         </DialogHeader>
         
@@ -52,7 +53,7 @@ const AdminLoginModal = ({ isOpen, onClose }) => {
           <div className="relative">
             <Input
               type={showPassword ? 'text' : 'password'}
-              placeholder="Introdu parola de admin"
+              placeholder={t('admin.enterPassword')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="bg-black/50 border-white/20 text-white placeholder:text-gray-500 pr-10 focus:border-red-500 focus:ring-red-500/20"
@@ -79,12 +80,12 @@ const AdminLoginModal = ({ isOpen, onClose }) => {
             disabled={isLoading || !password}
             className="w-full bg-red-500 hover:bg-red-600 text-white transition-all"
           >
-            {isLoading ? 'Se verifică...' : 'Autentificare'}
+            {isLoading ? t('admin.verifying') : t('admin.authenticate')}
           </Button>
         </form>
 
         <p className="text-xs text-gray-500 text-center mt-4">
-          Doar administratorul site-ului are acces
+          {t('admin.onlyAdmin')}
         </p>
       </DialogContent>
     </Dialog>
