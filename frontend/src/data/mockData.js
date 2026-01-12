@@ -10,9 +10,9 @@ export const profileData = {
   bio: "Pasionat de electronică, programare și proiecte creative. Transform ideile în realitate prin circuite și cod.",
   email: "contact@lwr.ro",
   social: {
-    instagram: "#",
-    linkedin: "#",
-    github: "#"
+    instagram: "https://www.instagram.com/lawrin.tho/",
+    linkedin: "https://www.linkedin.com/in/lawrin/",
+    github: "https://github.com/IamLawrin"
   }
 };
 
