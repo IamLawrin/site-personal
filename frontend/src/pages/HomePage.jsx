@@ -1,16 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Cpu, Code, Zap, ChevronDown } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { profileData, mockProjects, mockReviews } from '../data/mockData';
+import { profileData } from '../data/mockData';
 import { useLanguage } from '../context/LanguageContext';
+import { projectsAPI, reviewsAPI } from '../services/api';
 import ProjectCard from '../components/projects/ProjectCard';
 import ReviewCard from '../components/reviews/ReviewCard';
 
 const HomePage = () => {
   const { t } = useLanguage();
-  const featuredProjects = mockProjects.filter(p => p.featured).slice(0, 2);
-  const latestReviews = mockReviews.slice(0, 3);
+  const [projects, setProjects] = useState([]);
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [projectsData, reviewsData] = await Promise.all([
+          projectsAPI.getAll(),
+          reviewsAPI.getAll()
+        ]);
+        setProjects(projectsData);
+        setReviews(reviewsData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const featuredProjects = projects.filter(p => p.featured).slice(0, 2);
+  const latestReviews = reviews.slice(0, 3);
 
   const scrollToContent = () => {
     document.getElementById('about-section')?.scrollIntoView({ behavior: 'smooth' });
