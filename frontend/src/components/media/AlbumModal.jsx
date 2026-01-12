@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FolderPlus, Trash2, Image as ImageIcon } from 'lucide-react';
+import { FolderPlus, Trash2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
+import ImageUploader from '../common/ImageUploader';
 
 const AlbumModal = ({ isOpen, onClose, album, onSave, onDelete }) => {
   const [formData, setFormData] = useState({
@@ -52,6 +53,13 @@ const AlbumModal = ({ isOpen, onClose, album, onSave, onDelete }) => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          {/* Cover Image Upload */}
+          <ImageUploader
+            value={formData.cover}
+            onChange={(url) => setFormData({ ...formData, cover: url })}
+            label="Imagine Copertă"
+          />
+
           <div>
             <Label className="text-gray-300">Nume Album</Label>
             <Input
@@ -59,7 +67,6 @@ const AlbumModal = ({ isOpen, onClose, album, onSave, onDelete }) => {
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="ex: Proiecte Arduino"
               className="bg-black/50 border-white/20 text-white mt-1"
-              autoFocus
               required
             />
           </div>
@@ -72,24 +79,6 @@ const AlbumModal = ({ isOpen, onClose, album, onSave, onDelete }) => {
               placeholder="Scurtă descriere a albumului"
               className="bg-black/50 border-white/20 text-white mt-1 min-h-20"
             />
-          </div>
-
-          <div>
-            <Label className="text-gray-300">URL Imagine Copertă</Label>
-            <Input
-              value={formData.cover}
-              onChange={(e) => setFormData({ ...formData, cover: e.target.value })}
-              placeholder="https://..."
-              className="bg-black/50 border-white/20 text-white mt-1"
-            />
-            {formData.cover && (
-              <img
-                src={formData.cover}
-                alt="Cover preview"
-                className="mt-2 w-full h-24 object-cover rounded-lg border border-white/10"
-                onError={(e) => e.target.style.display = 'none'}
-              />
-            )}
           </div>
 
           <div className="flex gap-3 pt-4">
