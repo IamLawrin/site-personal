@@ -306,11 +306,10 @@ const MediaPage = () => {
       <section className="py-12 md:py-16 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <blockquote className="text-xl md:text-3xl font-light text-white leading-relaxed mb-4">
-            "Fiecare imagine spune o poveste. Aici sunt poveștile mele."
+            {t('media.quote')}
           </blockquote>
           <p className="text-gray-400 text-base md:text-lg">
-            O colecție de momente capturate din proiectele mele de electronică, 
-            workshop și călătoria mea ca student și creator.
+            {t('media.description')}
           </p>
         </div>
       </section>
@@ -377,7 +376,7 @@ const MediaPage = () => {
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
               <FolderOpen className="w-6 h-6 text-red-500" />
-              <h2 className="text-2xl font-bold text-white">Albume</h2>
+              <h2 className="text-2xl font-bold text-white">{t('media.albums')}</h2>
             </div>
 
             {isAdmin && (
