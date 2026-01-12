@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Tag, ExternalLink, ChevronLeft, ChevronRight, X, Edit2, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Tag, ExternalLink, ChevronLeft, ChevronRight, X, Edit2, Plus, Trash2, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { useAuth } from '../context/AuthContext';
-import { mockProjects } from '../data/mockData';
+import { projectsAPI } from '../services/api';
 import ProjectGalleryModal from '../components/projects/ProjectGalleryModal';
 
 const ProjectDetailPage = () => {
@@ -12,23 +12,29 @@ const ProjectDetailPage = () => {
   const navigate = useNavigate();
   const { isAdmin } = useAuth();
   
-  // Find project - in production this would come from API
-  const [project, setProject] = useState(() => {
-    const found = mockProjects.find(p => p.id === id);
-    if (found) {
-      // Add mock gallery images if not present
-      return {
-        ...found,
-        gallery: found.gallery || [
-          found.image,
-          'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop',
-        ],
-        longDescription: found.longDescription || `${found.description}\n\nAcest proiect a fost realizat folosind tehnologii moderne și reprezintă o soluție inovatoare în domeniul ${found.category.toLowerCase()}. Am lucrat la el timp de câteva săptămâni, parcurgând toate etapele de la concept la implementare.\n\nProiectul include multiple funcționalități și a fost optimizat pentru performanță și ușurință în utilizare.`
-      };
-    }
-    return null;
-  });
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch project from API
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        const data = await projectsAPI.getById(id);
+        // Add default gallery if not present
+        setProject({
+          ...data,
+          gallery: data.gallery?.length > 0 ? data.gallery : [data.image].filter(Boolean),
+          longDescription: data.longDescription || `${data.description}\n\nAcest proiect a fost realizat folosind tehnologii moderne și reprezintă o soluție inovatoare în domeniul ${data.category?.toLowerCase() || 'tehnologie'}. Am lucrat la el timp de câteva săptămâni, parcurgând toate etapele de la concept la implementare.\n\nProiectul include multiple funcționalități și a fost optimizat pentru performanță și ușurință în utilizare.`
+        });
+      } catch (error) {
+        console.error('Error fetching project:', error);
+        setProject(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProject();
+  }, [id]);
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [galleryModalOpen, setGalleryModalOpen] = useState(false);
