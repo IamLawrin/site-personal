@@ -313,11 +313,11 @@ const MediaPage = () => {
         </div>
       </section>
 
-      {/* Featured Slideshow - Smaller */}
+      {/* Featured Slideshow */}
       {featuredImages.length > 0 && (
         <section className="mb-12 md:mb-16 px-4 sm:px-6">
-          <div className="max-w-5xl mx-auto">
-            <div className="relative aspect-[16/7] rounded-xl overflow-hidden bg-zinc-900">
+          <div className="max-w-6xl mx-auto">
+            <div className="relative aspect-[16/8] rounded-xl overflow-hidden bg-zinc-900">
               {featuredImages.map((img, index) => (
                 <div
                   key={img.id}
