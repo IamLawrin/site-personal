@@ -22,40 +22,57 @@ export const mockProjects = [
     title: "Smart Home Controller",
     description: "Sistem de automatizare pentru casă bazat pe ESP32 cu interfață web și control prin aplicație mobilă.",
     category: "Electronics",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=600&h=400&fit=crop",
     technologies: ["ESP32", "C++", "React", "MQTT"],
     date: "2024-12-15",
-    featured: true
+    featured: true,
+    gallery: [
+      "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1597739239353-50270a473397?w=800&h=600&fit=crop",
+    ]
   },
   {
     id: "2",
     title: "LED Matrix Display",
     description: "Matrice LED 32x16 controlată prin Arduino cu animații personalizate și sincronizare audio.",
     category: "Electronics",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=400&fit=crop",
     technologies: ["Arduino", "WS2812B", "Python"],
     date: "2024-10-20",
-    featured: true
+    featured: true,
+    gallery: [
+      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1563770660941-20978e870e26?w=800&h=600&fit=crop",
+    ]
   },
   {
     id: "3",
     title: "Portfolio Website",
     description: "Site personal de portofoliu cu design modern și funcționalități de administrare.",
     category: "Web Development",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&h=400&fit=crop",
     technologies: ["React", "Node.js", "MongoDB"],
     date: "2025-01-10",
-    featured: false
+    featured: false,
+    gallery: [
+      "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=600&fit=crop",
+    ]
   },
   {
     id: "4",
     title: "Weather Station",
     description: "Stație meteo DIY cu senzori de temperatură, umiditate și presiune atmosferică.",
     category: "Electronics",
-    image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1592210454359-9043f067919b?w=600&h=400&fit=crop",
     technologies: ["Raspberry Pi", "Python", "InfluxDB"],
     date: "2024-08-05",
-    featured: false
+    featured: false,
+    gallery: [
+      "https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800&h=600&fit=crop",
+    ]
   }
 ];
 
@@ -86,6 +103,7 @@ export const mockReviews = [
   }
 ];
 
+// Different images for Media gallery (not overlapping with projects)
 export const mockGalleryImages = [
   {
     id: "1",
@@ -103,17 +121,24 @@ export const mockGalleryImages = [
   },
   {
     id: "3",
-    title: "LED Project",
-    url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop",
+    title: "Soldering Work",
+    url: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800&h=600&fit=crop",
     category: "Projects",
     date: "2024-10-20"
   },
   {
     id: "4",
-    title: "Soldering Station",
-    url: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800&h=600&fit=crop",
-    category: "Workspace",
+    title: "Electronics Components",
+    url: "https://images.unsplash.com/photo-1562408590-e32931084e23?w=800&h=600&fit=crop",
+    category: "Electronics",
     date: "2024-09-05"
+  },
+  {
+    id: "5",
+    title: "Lab Equipment",
+    url: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&h=600&fit=crop",
+    category: "Workspace",
+    date: "2024-08-20"
   }
 ];
 
