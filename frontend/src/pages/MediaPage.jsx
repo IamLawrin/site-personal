@@ -435,7 +435,7 @@ const MediaPage = () => {
                 <div className="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center mb-3 group-hover:bg-red-500/30 transition-colors">
                   <Plus className="w-7 h-7 text-red-500" />
                 </div>
-                <p className="text-gray-400 group-hover:text-white transition-colors">Creează album nou</p>
+                <p className="text-gray-400 group-hover:text-white transition-colors">{t('media.createNewAlbum')}</p>
               </div>
             )}
           </div>
