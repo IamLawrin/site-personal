@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import HomePage from './pages/HomePage';
@@ -13,24 +14,26 @@ import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <div className="App min-h-screen bg-black text-white">
-          <Header />
-          <main>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/projects" element={<ProjectsPage />} />
-              <Route path="/projects/:id" element={<ProjectDetailPage />} />
-              <Route path="/reviews" element={<ReviewsPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/media" element={<MediaPage />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </BrowserRouter>
-    </AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <div className="App min-h-screen bg-black text-white">
+            <Header />
+            <main>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/projects/:id" element={<ProjectDetailPage />} />
+                <Route path="/reviews" element={<ReviewsPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/media" element={<MediaPage />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </AuthProvider>
+    </LanguageProvider>
   );
 }
 
