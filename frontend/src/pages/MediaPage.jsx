@@ -429,7 +429,7 @@ const MediaPage = () => {
             {isAdmin && (
               <div
                 onClick={() => { setEditingAlbum(null); setAlbumModalOpen(true); }}
-                className="group aspect-[4/3] bg-zinc-900/50 rounded-xl border-2 border-dashed border-white/20 hover:border-red-500/50 flex flex-col items-center justify-center cursor-pointer transition-all"
+                className="group aspect-[4/3] bg-zinc-900/50 border-2 border-dashed border-white/20 hover:border-red-500/50 flex flex-col items-center justify-center cursor-pointer transition-all"
               >
                 <div className="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center mb-3 group-hover:bg-red-500/30 transition-colors">
                   <Plus className="w-7 h-7 text-red-500" />
