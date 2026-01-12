@@ -1,30 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { FolderPlus, Trash2 } from 'lucide-react';
+import { FolderPlus, Trash2, Image as ImageIcon } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 
 const AlbumModal = ({ isOpen, onClose, album, onSave, onDelete }) => {
-  const [name, setName] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    cover: ''
+  });
 
   useEffect(() => {
     if (album) {
-      setName(album.name || '');
+      setFormData({
+        name: album.name || '',
+        description: album.description || '',
+        cover: album.cover || ''
+      });
     } else {
-      setName('');
+      setFormData({
+        name: '',
+        description: '',
+        cover: ''
+      });
     }
   }, [album, isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name.trim()) return;
-    onSave({ name: name.trim() });
-    setName('');
+    if (!formData.name.trim()) return;
+    onSave(formData);
   };
 
   const handleDelete = () => {
-    if (album && album.id !== 'all') {
+    if (album) {
       onDelete(album.id);
     }
   };
@@ -43,8 +55,8 @@ const AlbumModal = ({ isOpen, onClose, album, onSave, onDelete }) => {
           <div>
             <Label className="text-gray-300">Nume Album</Label>
             <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="ex: Proiecte Arduino"
               className="bg-black/50 border-white/20 text-white mt-1"
               autoFocus
@@ -52,8 +64,36 @@ const AlbumModal = ({ isOpen, onClose, album, onSave, onDelete }) => {
             />
           </div>
 
+          <div>
+            <Label className="text-gray-300">Descriere</Label>
+            <Textarea
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              placeholder="Scurtă descriere a albumului"
+              className="bg-black/50 border-white/20 text-white mt-1 min-h-20"
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-300">URL Imagine Copertă</Label>
+            <Input
+              value={formData.cover}
+              onChange={(e) => setFormData({ ...formData, cover: e.target.value })}
+              placeholder="https://..."
+              className="bg-black/50 border-white/20 text-white mt-1"
+            />
+            {formData.cover && (
+              <img
+                src={formData.cover}
+                alt="Cover preview"
+                className="mt-2 w-full h-24 object-cover rounded-lg border border-white/10"
+                onError={(e) => e.target.style.display = 'none'}
+              />
+            )}
+          </div>
+
           <div className="flex gap-3 pt-4">
-            {album && album.id !== 'all' && (
+            {album && (
               <Button
                 type="button"
                 variant="destructive"
@@ -73,7 +113,7 @@ const AlbumModal = ({ isOpen, onClose, album, onSave, onDelete }) => {
             </Button>
             <Button
               type="submit"
-              disabled={!name.trim()}
+              disabled={!formData.name.trim()}
               className="flex-1 bg-red-500 hover:bg-red-600 text-white"
             >
               {album ? 'Salvează' : 'Creează'}

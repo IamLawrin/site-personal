@@ -6,17 +6,24 @@ import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
-const MediaUploadModal = ({ isOpen, onClose, onSave, albums }) => {
+const MediaUploadModal = ({ isOpen, onClose, onSave, albums, defaultAlbum }) => {
   const [formData, setFormData] = useState({
     title: '',
     category: '',
-    albumId: '',
+    albumId: defaultAlbum || '',
     url: ''
   });
   const [preview, setPreview] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef(null);
+
+  // Reset form when modal opens with default album
+  React.useEffect(() => {
+    if (isOpen && defaultAlbum) {
+      setFormData(prev => ({ ...prev, albumId: defaultAlbum }));
+    }
+  }, [isOpen, defaultAlbum]);
 
   const handleFileSelect = (file) => {
     if (file && file.type.startsWith('image/')) {
@@ -71,12 +78,12 @@ const MediaUploadModal = ({ isOpen, onClose, onSave, albums }) => {
     });
     
     // Reset form
-    setFormData({ title: '', category: '', albumId: '', url: '' });
+    setFormData({ title: '', category: '', albumId: defaultAlbum || '', url: '' });
     setPreview(null);
   };
 
   const handleClose = () => {
-    setFormData({ title: '', category: '', albumId: '', url: '' });
+    setFormData({ title: '', category: '', albumId: defaultAlbum || '', url: '' });
     setPreview(null);
     onClose();
   };
