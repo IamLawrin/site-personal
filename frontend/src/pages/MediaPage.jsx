@@ -8,9 +8,18 @@ import MediaUploadModal from '../components/media/MediaUploadModal';
 import AlbumModal from '../components/media/AlbumModal';
 import { mockGalleryImages } from '../data/mockData';
 
+// Helper to check if item is new (added within last 7 days)
+const isNewItem = (dateString) => {
+  if (!dateString) return false;
+  const itemDate = new Date(dateString);
+  const now = new Date();
+  const diffDays = Math.floor((now - itemDate) / (1000 * 60 * 60 * 24));
+  return diffDays <= 7;
+};
+
 const MediaPage = () => {
   const { isAdmin } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeAlbumId = searchParams.get('album');
   
@@ -26,19 +35,22 @@ const MediaPage = () => {
       id: 'electronics', 
       name: 'Electronică', 
       description: 'Proiecte și componente electronice',
-      cover: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop'
+      cover: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop',
+      createdAt: '2024-12-01'
     },
     { 
       id: 'workspace', 
       name: 'Workspace', 
       description: 'Laboratorul meu de lucru',
-      cover: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop'
+      cover: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop',
+      createdAt: '2024-11-15'
     },
     { 
       id: 'projects', 
       name: 'Proiecte', 
       description: 'Proiecte finalizate',
-      cover: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop'
+      cover: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop',
+      createdAt: '2025-01-10'
     },
   ]);
 
