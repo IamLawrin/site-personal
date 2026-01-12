@@ -5,6 +5,7 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
+import ImageUploader from '../common/ImageUploader';
 
 const ProjectModal = ({ isOpen, onClose, project, onSave }) => {
   const [formData, setFormData] = useState({
@@ -56,6 +57,24 @@ const ProjectModal = ({ isOpen, onClose, project, onSave }) => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          {/* Image Upload */}
+          <ImageUploader
+            value={formData.image}
+            onChange={(url) => setFormData({ ...formData, image: url })}
+            label="Imagine Proiect"
+          />
+
+          {/* Or URL Input */}
+          <div>
+            <Label className="text-gray-300">Sau URL Imagine</Label>
+            <Input
+              value={formData.image?.startsWith('data:') ? '' : formData.image}
+              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+              placeholder="https://..."
+              className="bg-black/50 border-white/20 text-white mt-1"
+            />
+          </div>
+
           <div>
             <Label className="text-gray-300">Titlu</Label>
             <Input
@@ -84,16 +103,6 @@ const ProjectModal = ({ isOpen, onClose, project, onSave }) => {
               placeholder="ex: Electronics, Web Development"
               className="bg-black/50 border-white/20 text-white mt-1"
               required
-            />
-          </div>
-
-          <div>
-            <Label className="text-gray-300">URL Imagine</Label>
-            <Input
-              value={formData.image}
-              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-              placeholder="https://..."
-              className="bg-black/50 border-white/20 text-white mt-1"
             />
           </div>
 
