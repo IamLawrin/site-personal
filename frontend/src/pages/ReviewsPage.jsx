@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
-import { Plus, Star } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, Star, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { mockReviews } from '../data/mockData';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import { reviewsAPI } from '../services/api';
 import ReviewCard from '../components/reviews/ReviewCard';
 import ReviewModal from '../components/reviews/ReviewModal';
 
 const ReviewsPage = () => {
   const { isAdmin } = useAuth();
   const { t } = useLanguage();
-  const [reviews, setReviews] = useState(mockReviews);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
+
+  // Fetch reviews from API
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const data = await reviewsAPI.getAll();
+        setReviews(data);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReviews();
+  }, []);
 
   const handleAddReview = () => {
     setEditingReview(null);
@@ -24,31 +40,43 @@ const ReviewsPage = () => {
     setModalOpen(true);
   };
 
-  const handleDeleteReview = (id) => {
+  const handleDeleteReview = async (id) => {
     if (window.confirm('Ești sigur că vrei să ștergi această recenzie?')) {
-      setReviews(reviews.filter(r => r.id !== id));
+      try {
+        await reviewsAPI.delete(id);
+        setReviews(reviews.filter(r => r.id !== id));
+      } catch (error) {
+        console.error('Error deleting review:', error);
+      }
     }
   };
 
-  const handleSaveReview = (reviewData) => {
-    if (editingReview) {
-      setReviews(reviews.map(r => 
-        r.id === editingReview.id ? { ...r, ...reviewData } : r
-      ));
-    } else {
-      const newReview = {
-        ...reviewData,
-        id: Date.now().toString(),
-        date: new Date().toISOString().split('T')[0]
-      };
-      setReviews([newReview, ...reviews]);
+  const handleSaveReview = async (reviewData) => {
+    try {
+      if (editingReview) {
+        const updated = await reviewsAPI.update(editingReview.id, reviewData);
+        setReviews(reviews.map(r => r.id === editingReview.id ? updated : r));
+      } else {
+        const newReview = await reviewsAPI.create(reviewData);
+        setReviews([newReview, ...reviews]);
+      }
+      setModalOpen(false);
+    } catch (error) {
+      console.error('Error saving review:', error);
     }
-    setModalOpen(false);
   };
 
   const avgRating = reviews.length > 0 
     ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
     : 0;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black pt-24 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black pt-24 pb-16">
