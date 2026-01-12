@@ -4,11 +4,22 @@ import { Edit2, Trash2, Plus } from 'lucide-react';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+
+// Helper to check if item is new (added within last 7 days)
+const isNew = (dateString) => {
+  const itemDate = new Date(dateString);
+  const now = new Date();
+  const diffDays = Math.floor((now - itemDate) / (1000 * 60 * 60 * 24));
+  return diffDays <= 7;
+};
 
 const ProjectCard = ({ project, onEdit, onDelete }) => {
   const { isAdmin } = useAuth();
+  const { language } = useLanguage();
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
+  const showNewBadge = isNew(project.date);
 
   const handleClick = () => {
     navigate(`/projects/${project.id}`);
