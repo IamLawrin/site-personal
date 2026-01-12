@@ -204,7 +204,7 @@ const MediaPage = () => {
               {albumImages.map((image) => (
                 <div
                   key={image.id}
-                  className="group relative aspect-[4/3] bg-zinc-900 rounded-lg overflow-hidden cursor-pointer"
+                  className="group relative aspect-[4/3] bg-zinc-900 overflow-hidden cursor-pointer"
                   onClick={() => setSelectedImage(image)}
                 >
                   <img
