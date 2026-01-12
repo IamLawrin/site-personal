@@ -57,6 +57,15 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
           {project.category}
         </Badge>
 
+        {/* NEW Badge */}
+        {showNewBadge && (
+          <div className="absolute top-4 left-4 translate-x-[calc(100%+8px)]">
+            <span className="px-2 py-1 text-xs font-bold bg-green-500 text-white rounded">
+              {language === 'ro' ? 'NOU' : 'NEW'}
+            </span>
+          </div>
+        )}
+
         {/* Admin Actions */}
         {isAdmin && (
           <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
