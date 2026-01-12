@@ -222,13 +222,13 @@ const MediaPage = () => {
             {albumImages.length === 0 && (
               <div className="text-center py-20">
                 <ImageIcon className="w-16 h-16 text-gray-700 mx-auto mb-4" />
-                <p className="text-gray-500">Nu există imagini în acest album.</p>
+                <p className="text-gray-500">{t('media.noImages')}</p>
                 {isAdmin && (
                   <Button
                     onClick={() => setUploadModalOpen(true)}
                     className="mt-4 bg-red-500 hover:bg-red-600 text-white rounded-full"
                   >
-                    Adaugă prima imagine
+                    {t('media.addFirstImage')}
                   </Button>
                 )}
               </div>
