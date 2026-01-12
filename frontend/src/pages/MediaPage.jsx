@@ -200,7 +200,7 @@ const MediaPage = () => {
         {/* Album Images Grid */}
         <div className="px-4 sm:px-6 pb-16">
           <div className="max-w-[1600px] mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
               {albumImages.map((image) => (
                 <div
                   key={image.id}
