@@ -417,6 +417,15 @@ const MediaPage = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 
+                {/* NEW Badge */}
+                {isNewItem(album.createdAt) && (
+                  <div className="absolute top-3 left-3">
+                    <span className="px-2 py-1 text-xs font-bold bg-green-500 text-white rounded shadow-lg">
+                      {language === 'ro' ? 'NOU' : 'NEW'}
+                    </span>
+                  </div>
+                )}
+                
                 {/* Album Info */}
                 <div className="absolute bottom-0 left-0 right-0 p-5">
                   <h3 className="text-white font-semibold text-xl mb-1 group-hover:text-red-400 transition-colors">
