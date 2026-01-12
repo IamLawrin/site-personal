@@ -39,6 +39,14 @@ const ProjectDetailPage = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [galleryModalOpen, setGalleryModalOpen] = useState(false);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black pt-24 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
+      </div>
+    );
+  }
+
   if (!project) {
     return (
       <div className="min-h-screen bg-black pt-24 flex items-center justify-center">
