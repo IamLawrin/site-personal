@@ -395,7 +395,7 @@ const MediaPage = () => {
               <div
                 key={album.id}
                 onClick={() => openAlbum(album.id)}
-                className="group relative aspect-[4/3] bg-zinc-900 rounded-xl overflow-hidden cursor-pointer"
+                className="group relative aspect-[4/3] bg-zinc-900 overflow-hidden cursor-pointer"
               >
                 <img
                   src={album.cover}
