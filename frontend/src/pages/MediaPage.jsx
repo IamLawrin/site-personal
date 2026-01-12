@@ -108,7 +108,8 @@ const MediaPage = () => {
       const newAlbum = {
         ...albumData,
         id: albumData.name.toLowerCase().replace(/\s+/g, '-'),
-        cover: albumData.cover || 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop'
+        cover: albumData.cover || 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop',
+        createdAt: new Date().toISOString().split('T')[0]
       };
       setAlbums(prev => [...prev, newAlbum]);
     }
