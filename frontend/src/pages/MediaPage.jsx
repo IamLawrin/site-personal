@@ -336,11 +336,11 @@ const MediaPage = () => {
       </section>
 
       {/* Featured Slideshow */}
-      {featuredImages.length > 0 && (
+      {featuredSlides.length > 0 && (
         <section className="mb-12 md:mb-16 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             <div className="relative aspect-[16/8] rounded-xl overflow-hidden bg-zinc-900">
-              {featuredImages.map((img, index) => (
+              {featuredSlides.map((img, index) => (
                 <div
                   key={img.id}
                   className={`absolute inset-0 transition-opacity duration-700 ${
@@ -376,7 +376,7 @@ const MediaPage = () => {
 
               {/* Dots */}
               <div className="absolute bottom-4 right-4 flex gap-1.5">
-                {featuredImages.map((_, index) => (
+                {featuredSlides.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
