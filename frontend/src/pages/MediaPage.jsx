@@ -141,8 +141,8 @@ const MediaPage = () => {
     setSearchParams({});
   };
 
-  const nextSlide = () => setCurrentSlide(prev => (prev + 1) % featuredImages.length);
-  const prevSlide = () => setCurrentSlide(prev => (prev - 1 + featuredImages.length) % featuredImages.length);
+  const nextSlide = () => setCurrentSlide(prev => (prev + 1) % featuredSlides.length);
+  const prevSlide = () => setCurrentSlide(prev => (prev - 1 + featuredSlides.length) % featuredSlides.length);
 
   // Navigate through images in full-screen viewer
   const nextImage = (e) => {
