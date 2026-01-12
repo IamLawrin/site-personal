@@ -50,7 +50,7 @@ const MediaPage = () => {
       name: 'Proiecte', 
       description: 'Proiecte finalizate',
       cover: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop',
-      createdAt: '2025-01-10'
+      createdAt: new Date().toISOString().split('T')[0] // Today - will show NEW badge
     },
   ]);
 
