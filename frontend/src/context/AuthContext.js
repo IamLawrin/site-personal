@@ -1,35 +1,46 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { authAPI } from '../services/api';
 
 const AuthContext = createContext();
-
-// Simple password for admin access (will be moved to backend)
-const ADMIN_PASSWORD = 'lwr2025admin';
 
 export const AuthProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if admin session exists
-    const adminSession = localStorage.getItem('lwr_admin_session');
-    if (adminSession === 'authenticated') {
-      setIsAdmin(true);
-    }
-    setIsLoading(false);
+    // Check if admin session exists and verify token
+    const checkAuth = async () => {
+      const token = localStorage.getItem('lwr_admin_token');
+      if (token) {
+        const valid = await authAPI.verify();
+        setIsAdmin(valid);
+        if (!valid) {
+          authAPI.logout();
+        }
+      }
+      setIsLoading(false);
+    };
+    checkAuth();
   }, []);
 
-  const login = (password) => {
-    if (password === ADMIN_PASSWORD) {
-      setIsAdmin(true);
-      localStorage.setItem('lwr_admin_session', 'authenticated');
-      return true;
+  const login = async (password) => {
+    try {
+      const result = await authAPI.login(password);
+      if (result.success) {
+        setIsAdmin(true);
+        localStorage.setItem('lwr_admin_session', 'authenticated');
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
     }
-    return false;
   };
 
   const logout = () => {
+    authAPI.logout();
     setIsAdmin(false);
-    localStorage.removeItem('lwr_admin_session');
   };
 
   return (
