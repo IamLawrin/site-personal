@@ -24,7 +24,7 @@ export const mockProjects = [
     category: "Electronics",
     image: "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=600&h=400&fit=crop",
     technologies: ["ESP32", "C++", "React", "MQTT"],
-    date: "2024-12-15",
+    date: new Date().toISOString().split('T')[0], // Today - will show NEW badge
     featured: true,
     gallery: [
       "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=800&h=600&fit=crop",
