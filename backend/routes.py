@@ -22,8 +22,13 @@ router = APIRouter()
 security = HTTPBearer(auto_error=False)
 
 # Config
-SECRET_KEY = os.environ.get('JWT_SECRET', 'lwr-secret-key-2025')
-ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'lwr2025admin')
+SECRET_KEY = os.environ.get('JWT_SECRET')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
+
+if not SECRET_KEY:
+    raise ValueError("JWT_SECRET environment variable is required")
+if not ADMIN_PASSWORD:
+    raise ValueError("ADMIN_PASSWORD environment variable is required")
 UPLOAD_DIR = Path('/app/backend/uploads')
 UPLOAD_DIR.mkdir(exist_ok=True)
 
