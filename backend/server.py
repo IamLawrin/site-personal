@@ -7,10 +7,10 @@ import os
 import logging
 from pathlib import Path
 
-from routes import router as api_routes, set_db
-
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+
+from routes import router as api_routes, set_db
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
