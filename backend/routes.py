@@ -220,9 +220,19 @@ async def get_contact_messages(_: dict = Depends(verify_token)):
 
 
 @router.post('/contact', response_model=ContactMessage)
-async def create_contact_message(data: ContactMessageCreate):
+async def create_contact_message(data: ContactMessageCreate, background_tasks: BackgroundTasks):
     message = ContactMessage(**data.dict())
     await db.contact.insert_one(message.dict())
+    
+    # Send email notification in background
+    background_tasks.add_task(
+        send_contact_notification,
+        data.name,
+        data.email,
+        data.subject,
+        data.message
+    )
+    
     return message
 
 
