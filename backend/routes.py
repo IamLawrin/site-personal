@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, UploadFile, File
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, BackgroundTasks
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import List, Optional
 import jwt
@@ -17,6 +17,7 @@ from models import (
     ContactMessage, ContactMessageCreate,
     Profile
 )
+from email_service import send_contact_notification
 
 router = APIRouter()
 security = HTTPBearer(auto_error=False)
