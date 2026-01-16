@@ -92,9 +92,10 @@ Utilizatorul dorește un site de portofoliu personal (lwr.ro) cu design negru ș
 - [x] Social media links added (Instagram, LinkedIn, GitHub)
 - [x] Language switcher (RO/EN) working
 - [x] NEW badge working on recent content
+- [x] Email notifications for contact form (Gmail SMTP)
 
 ## Backlog
-- [ ] User-specific email sending for contact form (user mentioned handling later)
+- (none - all features complete)
 
 ## Testing
 - Backend: 23/23 pytest tests passing
